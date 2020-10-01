@@ -10,18 +10,31 @@
     <div class="game-container">
         <h1 class="text game-title">Etch-A-Sketch</h1>
         <p class="text game-instructions">Mouse over the grid squares to color them!</p>
-        <button class="btn" id="reset-game">Reset Game</button>
+        <button class="btn reset-game">Reset Game</button>
+        <button class="btn opt-btn shade">Shade</button>
+        <button class="btn opt-btn specific-color">Specific Color</button>
+        <button class="btn opt-btn rainbow">Rainbow</button>
         <div class="grid-container"></div>
     </div>
     <script>
-        const resetButton = document.querySelector('#reset-game');
+        const resetButton = document.querySelector('.btn.reset-game');
+        const shadeButton = document.querySelector('.btn.shade');
+        const specificColorButton = document.querySelector('.btn.specific-color');
+        const rainbowButton = document.querySelector('.btn.rainbow');
         const gridContainer = document.querySelector('.grid-container');
+        let userSelectedBackgroundColor = "red";
+        let userSlectedColoringMethod = specificColor;
 
         
         resetButton.addEventListener('click', buildGrid);
+        shadeButton.addEventListener('click', )
 
-        function buildGrid() {
-            let gridSize = prompt("What size grid you want?");
+        buildGrid(16);
+
+        function promptGrid() {
+            buildGrid(prompt("What size?"));
+        }
+        function buildGrid(gridSize) {
             resetGrid();
             gridContainer.setAttribute('style', `grid-template-rows: repeat(${gridSize}, 1fr);
         grid-template-columns: repeat(${gridSize}, 1fr);`);
@@ -38,15 +51,24 @@
         }
         function colorBlock(e) {
             let targetBackgroundColor = e.target.style.backgroundColor;
-            let rgbValue = targetBackgroundColor.match(/\((\d+),/)[1];
-            let changedRGB = rgbValue > 255/5 ? rgbValue - 255/5 : 0; 
-            e.target.style.backgroundColor = `rgb(${changedRGB}, ${changedRGB}, ${changedRGB})`;
-            
+            e.target.style.backgroundColor = userSlectedColoringMethod(targetBackgroundColor);
         }
         function resetGrid() {
             while (gridContainer.firstChild) { gridContainer.removeChild(gridContainer.lastChild);}
             /* let blockList = document.querySelectorAll('.grid-block');
             blockList.forEach(block => block.style.backgroundColor = "rgb(255, 255, 255)"); */
+        }
+        function rainbowColor() {
+            function randomColor() {return Math.floor(Math.random()*255);}
+            return `rgb(${randomColor()}, ${randomColor()}, ${randomColor()})`;
+        }
+        function shadingColor(inputBackgroundColor) {
+            let rgbValue = inputBackgroundColor.match(/\((\d+),/)[1];
+            let changedRGB = rgbValue > 255/5 ? rgbValue - 255/5 : 0;
+            return `rgb(${changedRGB}, ${changedRGB}, ${changedRGB})`;
+        }
+        function specificColor() {
+            return userSelectedBackgroundColor;
         }
 
     </script>
