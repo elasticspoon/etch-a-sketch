@@ -1,0 +1,10 @@
+.grid-block {
+    background-color: red;
+    border: 2px black;
+}
+.game-container {
+    width: 400px;
+    height: 400px;
+    background-color: white;
+    border: 2px gray;
+}
