@@ -26,8 +26,16 @@
         let userSlectedColoringMethod = specificColor;
 
         
-        resetButton.addEventListener('click', buildGrid);
-        shadeButton.addEventListener('click', )
+        resetButton.addEventListener('click', promptGrid);
+        specificColorButton.addEventListener('click', () => {
+            userSelectedBackgroundColor = "green";
+            userSlectedColoringMethod = specificColor;
+        });
+        rainbowButton.addEventListener('click', () => userSlectedColoringMethod = rainbowColor);
+        shadeButton.addEventListener('click', () => userSlectedColoringMethod = shadingColor);
+        
+
+        
 
         buildGrid(16);
 
