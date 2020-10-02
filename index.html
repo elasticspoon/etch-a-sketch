@@ -10,10 +10,15 @@
     <div class="game-container">
         <h1 class="text game-title">Etch-A-Sketch</h1>
         <p class="text game-instructions">Mouse over the grid squares to color them!</p>
-        <button class="btn reset-game">Reset Game</button>
         <button class="btn opt-btn shade">Shade</button>
-        <button class="btn opt-btn specific-color">Specific Color</button>
         <button class="btn opt-btn rainbow">Rainbow</button>
+        <button class="btn opt-btn specific-color">Specific Color</button>
+        <input class="input color-picker" type="color">
+        <div class="slide-container">
+            <input type="range" min="1" max="64" value="16" class="input slider">
+            <div class="slider-value">16</div>
+            <button class="btn reset-game">Reset Game</button>
+        </div>
         <div class="grid-container"></div>
     </div>
     <script>
@@ -22,25 +27,28 @@
         const specificColorButton = document.querySelector('.btn.specific-color');
         const rainbowButton = document.querySelector('.btn.rainbow');
         const gridContainer = document.querySelector('.grid-container');
+        const sizeSlider = document.querySelector('.slider');
+        const sliderText = document.querySelector('.slider-value');
         let userSelectedBackgroundColor = "rgb(0, 255, 0)";
         let userSlectedColoringMethod = specificColor;
 
         
+
         resetButton.addEventListener('click', promptGrid);
         specificColorButton.addEventListener('click', () => {
-            userSelectedBackgroundColor = "rgb(255, 0, 0)";
+            userSelectedBackgroundColor = document.querySelector('.color-picker').value;
             userSlectedColoringMethod = specificColor;
         });
         rainbowButton.addEventListener('click', () => userSlectedColoringMethod = rainbowColor);
         shadeButton.addEventListener('click', () => userSlectedColoringMethod = shadingColor);
-        
+        sizeSlider.addEventListener('input', () => sliderText.textContent = sizeSlider.valueAsNumber);
 
         
 
         buildGrid(16);
 
         function promptGrid() {
-            buildGrid(prompt("What size?"));
+            buildGrid(sizeSlider.valueAsNumber);
         }
         function buildGrid(gridSize) {
             resetGrid();
@@ -59,7 +67,6 @@
         }
         function colorBlock(e) {
             let targetBackgroundColor = e.target.style.backgroundColor;
-            console.log(targetBackgroundColor);
             e.target.style.backgroundColor = userSlectedColoringMethod(targetBackgroundColor);
         }
         function resetGrid() {
@@ -72,10 +79,9 @@
             return `rgb(${randomColor()}, ${randomColor()}, ${randomColor()})`;
         }
         function shadingColor(inputBackgroundColor) {
-            console.log(inputBackgroundColor);
-            let rgbValue = inputBackgroundColor.match(/\((\d+),/)[1];
-            let changedRGB = rgbValue > 255/5 ? rgbValue - 255/5 : 0;
-            return `rgb(${changedRGB}, ${changedRGB}, ${changedRGB})`;
+            let rgbValues = inputBackgroundColor.match(/(\d+)/g);
+            let changedRGBs = rgbValues.map(num => num - 255/5 < 0 ? num = 0 : num -= (255/5))
+            return `rgb(${changedRGBs[0]}, ${changedRGBs[1]}, ${changedRGBs[2]})`;
         }
         function specificColor() {
             return userSelectedBackgroundColor;
